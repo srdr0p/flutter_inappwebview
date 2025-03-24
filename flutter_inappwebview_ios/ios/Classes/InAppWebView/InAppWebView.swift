@@ -298,9 +298,9 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate,
                 }
             }
           
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                self.onCreateContextMenu()
-            }
+            // DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            //     self.onCreateContextMenu()
+            // }
           
             // if #unavailable(iOS 16.4), settings?.disableContextMenu == false {
             //     contextMenuIsShowing = false
