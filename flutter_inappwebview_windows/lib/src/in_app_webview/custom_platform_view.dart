@@ -279,7 +279,6 @@ class _CustomPlatformViewState extends State<CustomPlatformView>
   MouseCursor _cursor = SystemMouseCursors.basic;
 
   final _controller = CustomPlatformViewController();
-  final _focusNode = FocusNode();
 
   StreamSubscription? _cursorSubscription;
 
@@ -331,7 +330,6 @@ class _CustomPlatformViewState extends State<CustomPlatformView>
   Widget build(BuildContext context) {
     return Focus(
       autofocus: true,
-      focusNode: _focusNode,
       canRequestFocus: true,
       debugLabel: "flutter_inappwebview_windows_custom_platform_view",
       onFocusChange: (focused) {},
@@ -362,14 +360,6 @@ class _CustomPlatformViewState extends State<CustomPlatformView>
                       _reportSurfaceSize();
                       _reportWidgetPosition();
 
-                      if (!_focusNode.hasFocus) {
-                        _focusNode.requestFocus();
-                        Future.delayed(const Duration(milliseconds: 50), () {
-                          if (!_focusNode.hasFocus) {
-                            _focusNode.requestFocus();
-                          }
-                        });
-                      }
 
                       _pointerKind = ev.kind;
                       if (ev.kind == PointerDeviceKind.touch) {
@@ -479,7 +469,6 @@ class _CustomPlatformViewState extends State<CustomPlatformView>
     _platformUtil.removeListener(this);
     _cursorSubscription?.cancel();
     _controller.dispose();
-    _focusNode.dispose();
     _listener.dispose();
   }
 }
