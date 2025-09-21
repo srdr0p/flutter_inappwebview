@@ -350,6 +350,8 @@ class _CustomPlatformViewState extends State<CustomPlatformView>
                     onPointerHover: (ev) {
                       // ev.kind is for whatever reason not set to touch
                       // even on touch input
+                      // If call _setCursorPos directly.
+                      // when touch is up, a mouse hover event is sent, cause focus lose
                       if (_pointerKind == PointerDeviceKind.touch) {
                         // Ignoring hover events on touch for now
                         return;
@@ -360,6 +362,18 @@ class _CustomPlatformViewState extends State<CustomPlatformView>
                       _reportSurfaceSize();
                       _reportWidgetPosition();
 
+                      // There is a bug in the following case:
+                      // 1. Use foliate-js to open a epub file
+                      // 2. Hover the mouse to text location A
+                      // 3. Use touch to longpress a text location B (after A) to select text
+                      // 4. Move mouse to location C (after B). Note: hover event is ignored in onPointerHover
+                      // 5. Click the mouse, the text between A and C will be selected. (Unexcepted)
+                      // Simulate a mouse hover event when switch from touch to mouse
+
+                      if (_pointerKind == PointerDeviceKind.touch &&
+                          ev.kind == PointerDeviceKind.mouse) {
+                        _controller._setCursorPos(ev.localPosition);
+                      }
 
                       _pointerKind = ev.kind;
                       if (ev.kind == PointerDeviceKind.touch) {
